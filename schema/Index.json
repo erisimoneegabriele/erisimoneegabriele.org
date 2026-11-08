@@ -1,0 +1,46 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://www.erisimoneegabriele.org/#organization",
+  "name": "Associazione Eri, Simone e Gabriele ETS",
+  "description": "Associazione che aiuta i poveri e i disabili. Ascoltiamo e offriamo supporto materiale e spirituale.",
+  "url": "https://www.tuosito.it/",
+  "logo": "https://www.tuosito.it/immagini/logo-associazioneerisimoneegabriele_piccolo.jpg",
+  "foundingDate": "2023",
+  "sameAs": [
+    "https://erisimoneegabrieleets.substack.com/"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "IT"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+393338954485",
+    "contactType": "customer service",
+    "email": "soriasimone@g"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servizi dell'Associazione",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "name": "Supporto ai poveri",
+        "description": "Aiutiamo i più fragili e i poveri con ascolto e supporto materiale."
+      },
+      {
+        "@type": "Offer",
+        "name": "Supporto ai disabili",
+        "description": "Offriamo ausili per la comunicazione e supporto quotidiano."
+      },
+      {
+        "@type": "Offer",
+        "name": "Volontariato",
+        "description": "Cerchiamo anime semplici per aiutare sempre di più e meglio."
+      }
+    ]
+  }
+}
+</script>
