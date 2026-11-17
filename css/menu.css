@@ -1,14 +1,18 @@
-/* --- Menu a tendina (burger) --- */
+/* ==========================================================================
+   menu.css - Gestione esclusiva del tasto Hamburger (☰) e del Menu a tendina
+   ========================================================================== */
+
+/* --- 1. PULSANTE HAMBURGER (☰) --- */
 .site-menu-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
-  top: 120px;
+  top: 120px; /* Posizione su Desktop (sotto l'header) */
   right: 4px;
   z-index: 1050;
   background: var(--primary);
-  color: var(--white); /* Corretto: var(--primary-text) non esiste */
+  color: var(--white);
   font-size: 1.15rem;
   padding: 10px 18px;
   border: none;
@@ -19,44 +23,31 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-/* Stile aperto */
+/* Aspetto del pulsante hamburger quando il menu è aperto */
 .site-menu-btn.active {
   background: #e0e0e0;
   color: var(--text);
 }
 
-/* --- Nav menu --- */
+/* --- 2. CONTENITORE DEL MENU A TENDINA (<ul>) --- */
 .site-menu {
   position: absolute;
   top: 60px;
   left: 0;
   z-index: 1000;
-  width: 260px; 
-  background: var(--primary); /* Corretto: var(--background) non esiste */
+  width: 260px;
+  background: var(--primary);
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   border-radius: 6px;
   transition: left 0.2s, width 0.2s;
   padding: 18px 0;
-  display: none; 
+  display: none; /* Nascosto finché non si clicca sull'hamburger */
   min-width: 220px;
   box-sizing: border-box;
-  list-style: none; /* Rimuove i pallini della lista */
+  list-style: none; /* Rimuove i pallini dell'elenco puntato */
 }
 
-/* Link del menu */
-.site-menu a {
-  color: #fff;   
-  text-decoration: none;
-  padding: 10px 18px;
-  font-weight: bold;
-  display: block;
-}
-
-.site-menu a:hover {
-  color: #00ffff; 
-}
-
-/* Su mobile/quando è attivo */
+/* Mostra il menu quando viene aggiunta la classe .active via JavaScript */
 .site-menu.active {
   display: flex;
   flex-direction: column;
@@ -66,7 +57,7 @@
   padding: 16px 0;
 }
 
-/* Voci di lista */
+/* --- 3. SINGOLE VOCI DEL MENU (<li> e <a>) --- */
 .site-menu-item {
   color: #fff;
   font-size: 1rem;
@@ -74,42 +65,61 @@
   width: 100%;
 }
 
+/* Evidenziazione della voce corrente (.active) o al passaggio del mouse */
 .site-menu-item.active,
 .site-menu-item:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
-/* --- Configurazione Desktop (Schermi grandi) --- */
+/* Stile dei link testuali dentro il menu */
+.site-menu a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 18px;
+  font-weight: bold;
+  display: block;
+}
+
+.site-menu a:hover {
+  color: #00ffff;
+}
+
+/* --- 4. ADATTAMENTO DESKTOP (Schermi larghi > 768px) --- */
 @media (min-width: 769px) {
+  /* Posiziona il menu a tendina aperto sul lato destro sotto l'hamburger */
   .site-menu {
     left: auto;
     right: 4px;
     width: 260px;
   }
+
   .site-menu-btn {
-    display: flex; 
+    display: flex;
   }
 }
 
-/* --- Configurazione Mobile (Schermi piccoli) --- */
-@media (max-width: 768px) { 
+/* --- 5. ADATTAMENTO MOBILE (Smartphone e Tablet <= 768px) --- */
+@media (max-width: 768px) {
+  /* Sposta il tasto hamburger dentro l'header in alto a destra */
   .site-menu-btn {
-    top: 15px; /* Spostato in alto vicino all'header su mobile */
-    right: 15px;
-    padding: 10px 14px;
+    top: 12px;
+    right: 10px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordino chiaro per visibilità */
   }
 
-  /* Nav menu dropdown su mobile */
+  /* Il menu aperto occupa tutta la larghezza dello schermo sotto l'header */
   .site-menu {
     position: fixed;
-    top: 70px;
+    top: 64px;
     left: 0;
     width: 100%;
     background: var(--primary);
-    padding: 16px 0;
+    padding: 12px 0;
     z-index: 999;
-    box-radius: 0;
+    border-radius: 0;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   }
 
   .site-menu.active {
@@ -119,7 +129,9 @@
     background: var(--primary);
   }
 
+  /* Link più alti e facili da toccare con il dito su smartphone */
   .site-menu-item a {
-    padding: 16px 20px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 }

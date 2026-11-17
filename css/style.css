@@ -1,4 +1,6 @@
-/* style.css */
+/* ==========================================================================
+   style.css - Stili generali, Header, Sezioni e Footer
+   ========================================================================== */
 
 :root {
   --primary: #2A4B7C;
@@ -22,33 +24,63 @@ body {
   line-height: 1.6;
 }
 
+/* Interlinea compatta e leggibile per tutti i titoli H2 e H3 */
+h2, h3 {
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+}
+
 .container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 20px;
 }
- 
- /* Fai diventare il riquadro orizzontale */
+
+/* --- HEADER: Barra superiore, Logo e Titolo --- */
+header {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.8rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Riquadro orizzontale che affianca logo e titolo */
 .logo-row {
   display: flex;
   align-items: center;
-  gap: 20px; /* spazio tra logo e titolo */
+  gap: 16px;
 }
 
-/* Stile titolo */
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Impedisce al logo di schiacciarsi */
+}
+
+.assoc-logo {
+  height: 55px;
+  width: auto;
+  border-radius: 6px;
+}
+
+/* Titolo dell'associazione nell'header */
 .assoc-title {
   color: #fff;
-  font-size: 1.5rem; /* puoi aumentare se vuoi più grande */
+  font-size: 1.5rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   font-family: 'Open Sans', Arial, sans-serif;
+  line-height: 1.25;
+  margin: 0;
 }
+
 .assoc-title .subtitle {
   font-weight: normal;
   color: #fff;
   margin-left: 2em !important;
 }
-
 
 .newline {
   display: block;
@@ -57,26 +89,8 @@ body {
   width: 0;
   margin: 0 0 0.0em 0;
 }
-/* HEADER */
-header {
-  background: var(--primary);
-  color: #fff;
-  padding: 1rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
- .logo {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-/*
-.logo img {
-  height: 48px;
-}*/	 
 
-/* SEZIONI */
+/* --- SEZIONI E CONTENUTI --- */
 .section {
   margin: 3rem auto 2rem auto;
   text-align: center;
@@ -88,6 +102,7 @@ header {
   width: 100%;
 }
 
+/* Contenitore flessibile che affianca immagine e blocco testo */
 .missione-hero {
   display: flex;
   align-items: center;
@@ -116,15 +131,19 @@ header {
   object-fit: cover;
 }
 
+/* Blocco testo accanto o sotto l'immagine: sempre largo 100% e allineato a sinistra */
 .missione-text {
   flex: 1;
+  width: 100%;
   text-align: left;
 }
 
 .missione-text h2 {
   margin-top: 0;
+  margin-bottom: 0.6rem;
   font-size: 2rem;
   font-weight: 600;
+  line-height: 1.25;
   color: var(--blue);
 }
 
@@ -134,13 +153,7 @@ header {
   margin: 0;
 }
 
-@media (max-width: 600px) {
-  .elenco-puntato {
-    padding-left: 16px;
-    font-size: 0.95em;
-  }
-}
-
+/* --- PULSANTI --- */
 .button {
   display: inline-block;
   background: var(--primary);
@@ -170,7 +183,7 @@ header {
   font-weight: bold;
 }
 
-/* Footer */
+/* --- FOOTER E CREDITI --- */
 footer {
   background: var(--primary);
   color: #fff;
@@ -194,24 +207,60 @@ address {
   text-align: center;
 }
 
-/* Responsive */
+/* Firma "Sito Web creato da Simone Soria" in verde chiaro ad alto contrasto */
+.crediti {
+  font-size: 0.85rem;
+  color: #86EFAC;
+  margin-top: 6px;
+}
+
+/* --- RESPONSIVE GENERALE (Tablet <= 768px) --- */
+@media (max-width: 768px) {
+  /* Lascia spazio a destra per il tasto hamburger ☰ ed evita sovrapposizioni */
+  .logo-row {
+    gap: 10px;
+    padding-right: 54px;
+  }
+
+  /* Riduce il logo su smartphone */
+  .assoc-logo {
+    height: 40px;
+  }
+
+  /* Riduce il titolo H1 su smartphone per evitare a capo sgradevoli */
+  .assoc-title {
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+}
+
+/* --- RESPONSIVE SEZIONI E SCHEDE (Smartphone <= 600px) --- */
 @media (max-width: 600px) {
   .container {
-    padding: 0 5px;
+    padding: 0 12px;
   }
   .section {
     padding: 1.5rem;
   }
+  /* Impila immagine sopra e testo sotto, mantenendo tutto allineato a sinistra */
   .missione-hero {
     flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
-    text-align: center;
+    text-align: left;
+  }
+  /* Forza l'allineamento a sinistra anche per le schede con testo corto (es. Iniziative) */
+  .missione-text {
+    width: 100%;
+    text-align: left;
   }
   .missione-img {
     width: 100%;
     max-width: 100%;
   }
+  .elenco-puntato {
+    padding-left: 16px;
+    font-size: 0.95em;
+  }
 }
-
-/* Social icons (aggiungi se vuoi, oppure usa Font Awesome) */
-/* Oppure puoi mettere direttamente i link nel footer */
