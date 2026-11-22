@@ -87,12 +87,11 @@ btnRec.addEventListener('click', async () => {
 });
 
 async function inviaAudio() {
-  const rawType = mediaRecorder.mimeType || 'audio/webm';
-  const cleanType = rawType.split(';').at(0);
-  const est = cleanType.includes('mp4') ? 'm4a' : 'webm';
-  const blob = new Blob(audioChunks, { type: cleanType });
-  const urlAudio = URL.createObjectURL(blob);
-  const file = new File([blob], "vocale." + est, { type: cleanType });
+  elStato.textContent = "Preparo audio per WhatsApp...";
+  const rawBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+  const wavBlob = await blobToWav(rawBlob);
+  const urlAudio = URL.createObjectURL(wavBlob);
+  const file = new File([wavBlob], "vocale.wav", { type: "audio/wav" });
 
   elStato.textContent = "Registrato! Premi INVIA:";
   elBoxTesto.innerHTML =
@@ -100,19 +99,11 @@ async function inviaAudio() {
     '<button id="btn-share-now" style="padding:16px;font-size:1.3rem;background:#ff9800;color:#000;border:none;border-radius:12px;font-weight:bold;width:100%;">📤 INVIA A WHATSAPP</button>';
 
   document.getElementById('btn-share-now').addEventListener('click', async () => {
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file] });
-        elStato.textContent = "Condiviso!";
-      } catch (e) {
-        if (e.name !== 'AbortError') elStato.textContent = "Err: " + e.message;
-      }
-    } else {
-      const a = document.createElement('a');
-      a.href = urlAudio;
-      a.download = "vocale." + est;
-      a.click();
-      elStato.textContent = "Salvato! Allegalo su WhatsApp";
+    try {
+      await navigator.share({ files: [file] });
+      elStato.textContent = "Condiviso!";
+    } catch (e) {
+      if (e.name !== 'AbortError') elStato.textContent = "Err: " + e.message;
     }
   });
 }
