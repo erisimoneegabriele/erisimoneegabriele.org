@@ -89,22 +89,23 @@ btnRec.addEventListener('click', async () => {
 
 async function inviaAudio() {
   const mimeType = mediaRecorder.mimeType || 'audio/webm';
-  const estensione = mimeType.includes('mp4') ? 'm4a' : 'ogg';
+  const est = mimeType.includes('mp4') ? 'm4a' : 'mp3';
   const blob = new Blob(audioChunks, { type: mimeType });
   const urlAudio = URL.createObjectURL(blob);
-  const file = new File([blob], "vocale." + estensione, { type: mimeType });
-  const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+  const file = new File([blob], "vocale." + est, { type: mimeType });
 
-  if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+  elStato.textContent = "Registrato! Premi INVIA:";
+  elBoxTesto.innerHTML =
+    '<audio controls src="' + urlAudio + '" style="width:100%;margin-bottom:10px;"></audio>' +
+    '<button id="btn-share-now" style="padding:16px;font-size:1.3rem;background:#ff9800;color:#000;border:none;border-radius:12px;font-weight:bold;width:100%;">📤 INVIA A WHATSAPP</button>';
+
+  document.getElementById('btn-share-now').addEventListener('click', async () => {
     try {
       await navigator.share({ files: [file] });
-      elStato.textContent = "Audio condiviso!";
+      elStato.textContent = "Condiviso!";
     } catch (e) {
-      elStato.textContent = "Condivisione annullata";
+      elStato.textContent = "Share non supportato: " + e.name;
     }
-  } else {
-    elStato.textContent = "Registrato! Riascolta qui sotto:";
-    elBoxTesto.innerHTML = '<audio controls autoplay src="' + urlAudio + '"></audio>';
-  }
+  });
 }
 

@@ -97,3 +97,23 @@ h1 { font-size: 2.2rem; margin-bottom: 10px; word-break: break-word; }
   animation: impulso-rec 1.2s infinite ease-in-out;
   border: 3px solid #ffffff;
 }
+/* Blocca l'allargamento della colonna sinistra quando appare l'audio */
+.area-contatto {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.box-testo {
+  width: 100%;
+  max-width: 100%;
+}
+
+.box-testo audio {
+  width: 100%;
+  max-width: 180px;
+  height: 44px;
+}
+
+.pulsantiera-dx {
+  flex-shrink: 0;
+}
