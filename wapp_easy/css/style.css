@@ -1,0 +1,76 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.contenitore { display: flex; height: 100%; width: 100%; }
+
+.area-contatto {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  text-align: center;
+}
+
+.avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+h1 { font-size: 2.2rem; margin-bottom: 10px; word-break: break-word; }
+#stato-msg { font-size: 1.2rem; color: #bbbbbb; }
+
+.box-testo {
+  margin-top: 15px;
+  font-size: 1.4rem;
+  color: #ffeb3b;
+  min-height: 60px;
+  padding: 8px;
+}
+
+.pulsantiera-dx {
+  width: 44%;
+  max-width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background-color: #1e1e1e;
+}
+
+.tasto {
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.tasto:active { transform: scale(0.96); }
+.tasto-testo { background-color: #1976d2; }
+.tasto-rec { background-color: #d32f2f; }
+.tasto-attivo { background-color: #ff9800; color: #000; }
+.tasto-chat { background-color: #25d366; color: #000; }
+.tasto-nav { flex: 1.3; background-color: #2c3e50; font-size: 1.5rem; }
