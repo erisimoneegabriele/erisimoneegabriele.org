@@ -21,13 +21,12 @@ body, html {
 }
 
 .scheda-contatto {
-  position: relative;
   width: 50%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 14px;
+  padding: 10px;
   text-align: center;
   background-color: #1e1e1e;
   border-right: 3px solid #333333;
@@ -39,17 +38,36 @@ body, html {
   background-color: #2a1215;
 }
 
+.barra-sinistra-top {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-guida-top,
 .btn-tts-mini {
-  position: absolute;
-  top: 10px;
-  left: 10px;
+  width: 100%;
+  min-height: 58px;
+  border-radius: 14px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: 2px solid #ffffff;
+}
+
+.btn-guida-top {
+  background-color: #d97706;
+  color: #ffffff;
+}
+
+.btn-tts-mini {
   background-color: #333333;
   color: #eeeeee;
-  border: 1px solid #666666;
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  font-weight: bold;
+  border-color: #888888;
 }
 
 .btn-tts-mini.attivo {
@@ -58,50 +76,21 @@ body, html {
   border-color: #81c784;
 }
 
-.avatar {
-  font-size: 4.5rem;
-  margin-bottom: 14px;
-}
-
-#nome-contatto {
-  font-size: 2.1rem;
-  line-height: 1.2;
-  word-break: break-word;
-}
-
-.stato {
-  margin-top: 18px;
-  font-size: 1.15rem;
-  color: #ffd54f;
-  font-weight: bold;
-}
-
-.pulsantiera {
-  width: 50%;
+.info-contatto {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-}
-
-.btn {
-  flex: 1;
-  border: none;
-  border-radius: 16px;
-  font-size: 1.45rem;
-  font-weight: bold;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 8px;
+  align-items: center;
 }
 
-.btn:active {
-  transform: scale(0.96);
-}
+.avatar { font-size: 4rem; margin-bottom: 10px; }
+#nome-contatto { font-size: 2rem; line-height: 1.2; word-break: break-word; }
+.stato { margin-top: 14px; font-size: 1.15rem; color: #ffd54f; font-weight: bold; }
 
+.pulsantiera { width: 50%; display: flex; flex-direction: column; gap: 10px; padding: 10px; }
+.btn { flex: 1; border: none; border-radius: 16px; font-size: 1.45rem; font-weight: bold; color: #ffffff; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px; }
+.btn:active { transform: scale(0.96); }
 .btn-chiama { background-color: #2e7d32; }
 .btn-detta { background-color: #1565c0; }
 .btn-nav { background-color: #424242; font-size: 1.8rem; }
@@ -112,7 +101,4 @@ body, html {
   100% { transform: scale(1); background-color: #c62828; }
 }
 
-.btn-detta.ascolto {
-  animation: pulsazione 1s infinite ease-in-out;
-  box-shadow: 0 0 18px rgba(255, 23, 68, 0.8);
-}
+.btn-detta.ascolto { animation: pulsazione 1s infinite ease-in-out; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
