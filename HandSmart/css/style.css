@@ -2,98 +2,117 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body {
+body, html {
+  height: 100%;
   font-family: sans-serif;
-  background-color: #f4f6f8;
-  color: #1a1a1a;
-  line-height: 1.6;
-  padding: 20px;
+  background-color: #121212;
+  color: #ffffff;
+  overflow: hidden;
 }
 
-.box-intro {
-  max-width: 680px;
-  margin: 0 auto;
-  background: #ffffff;
-  padding: 28px;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+.contenitore {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
 }
 
-header {
+.scheda-contatto {
+  position: relative;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
   text-align: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #eeeeee;
-  padding-bottom: 14px;
+  background-color: #1e1e1e;
+  border-right: 3px solid #333333;
+  transition: box-shadow 0.2s ease;
 }
 
-h1 {
-  font-size: 2.2rem;
-  color: #1565c0;
+.scheda-contatto.in-registrazione {
+  box-shadow: inset 0 0 0 6px #ff1744;
+  background-color: #2a1215;
 }
 
-.sottotitolo {
-  font-size: 1.25rem;
+.btn-tts-mini {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #333333;
+  color: #eeeeee;
+  border: 1px solid #666666;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
   font-weight: bold;
-  color: #333333;
-  margin-top: 4px;
 }
 
-.descrizione {
-  text-align: left;
-  margin-bottom: 24px;
-  border-bottom: 2px solid #eeeeee;
-  padding-bottom: 20px;
-}
-
-.descrizione p {
-  margin-bottom: 12px;
-  font-size: 1rem;
-  color: #222222;
-}
-
-.legenda-tasti {
-  list-style-type: disc;
-  text-align: left;
-  margin: 14px 0 0 24px;
-}
-
-.legenda-tasti li {
-  margin-bottom: 8px;
-  font-size: 1.05rem;
-}
-
-.testo-verde { color: #2e7d32; }
-.testo-blu { color: #1565c0; }
-
-.guida {
-  text-align: left;
-}
-
-.guida h2 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #2e7d32;
-}
-
-.guida ol {
-  margin: 12px 0 24px 24px;
-}
-
-.guida li {
-  margin-bottom: 10px;
-}
-
-.btn-avvia {
-  display: block;
-  width: 100%;
-  text-align: center;
+.btn-tts-mini.attivo {
   background-color: #2e7d32;
   color: #ffffff;
-  text-decoration: none;
-  font-size: 1.4rem;
+  border-color: #81c784;
+}
+
+.avatar {
+  font-size: 4.5rem;
+  margin-bottom: 14px;
+}
+
+#nome-contatto {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.stato {
+  margin-top: 18px;
+  font-size: 1.15rem;
+  color: #ffd54f;
   font-weight: bold;
-  padding: 18px;
-  border-radius: 12px;
+}
+
+.pulsantiera {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.btn {
+  flex: 1;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.45rem;
+  font-weight: bold;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-chiama { background-color: #2e7d32; }
+.btn-detta { background-color: #1565c0; }
+.btn-nav { background-color: #424242; font-size: 1.8rem; }
+
+@keyframes pulsazione {
+  0% { transform: scale(1); background-color: #c62828; }
+  50% { transform: scale(0.97); background-color: #ff1744; }
+  100% { transform: scale(1); background-color: #c62828; }
+}
+
+.btn-detta.ascolto {
+  animation: pulsazione 1s infinite ease-in-out;
+  box-shadow: 0 0 18px rgba(255, 23, 68, 0.8);
 }
