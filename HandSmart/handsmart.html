@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HandSmart - Il cellulare in una mano</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="contenitore">
+    <section class="scheda-contatto" aria-live="polite">
+      <button id="btn-tts" class="btn-tts-mini" type="button" aria-pressed="false">
+        🔇 Voce OFF
+      </button>
+      <div id="avatar-box" class="avatar">👤</div>
+      <h1 id="nome-contatto">Caricamento...</h1>
+      <p id="stato-azione" class="stato">Pronto</p>
+    </section>
+
+    <nav class="pulsantiera" aria-label="Comandi pollice destro">
+      <button id="btn-chiama" class="btn btn-chiama" type="button">
+        📞 CHIAMA
+      </button>
+      <button id="btn-detta" class="btn btn-detta" type="button">
+        🗣️ DETTA TESTO
+      </button>
+      <button id="btn-su" class="btn btn-nav" type="button">
+        ▲ SU
+      </button>
+      <button id="btn-giu" class="btn btn-nav" type="button">
+        ▼ GIÙ
+      </button>
+    </nav>
+  </main>
+
+  <script src="js/rubrica.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/dettatura.js"></script>
+  <script src="js/handsmart.js"></script>
+</body>
+</html>
