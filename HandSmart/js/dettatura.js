@@ -5,14 +5,15 @@ const Dettatura = (function() {
   let testoAccumulato = "";
   let timerSilenzio = null;
 
-  function fermaEInvia(onRisultato, onStato) {
+  function fermaEInvia(onRisultato, onStato, onFine) {
+    if (!inAscolto) return;
+    inAscolto = false;
     if (timerSilenzio) {
       clearTimeout(timerSilenzio);
       timerSilenzio = null;
     }
-    inAscolto = false;
     if (rec) {
-      try { rec.stop(); } catch (e) {}
+      try { rec.abort(); } catch (e) {}
     }
     const pulito = testoAccumulato.trim();
     if (pulito.length > 0) {
@@ -20,6 +21,7 @@ const Dettatura = (function() {
     } else {
       onStato("Nessuna parola rilevata");
     }
+    onFine();
   }
 
   function avvia(onRisultato, onStato, onFine) {
@@ -28,8 +30,8 @@ const Dettatura = (function() {
       return;
     }
 
-    if (inAscolto && rec) {
-      fermaEInvia(onRisultato, onStato);
+    if (inAscolto) {
+      fermaEInvia(onRisultato, onStato, onFine);
       return;
     }
 
@@ -60,20 +62,20 @@ const Dettatura = (function() {
         onStato("Dettato: " + testoAccumulato.trim());
       }
       timerSilenzio = setTimeout(function() {
-        if (inAscolto) fermaEInvia(onRisultato, onStato);
+        fermaEInvia(onRisultato, onStato, onFine);
       }, 4000);
     };
 
     rec.onerror = function(err) {
-      if (err.error !== "aborted") {
+      if (err.error !== "aborted" && inAscolto) {
         onStato("Errore: " + err.error);
       }
     };
 
     rec.onend = function() {
-      if (timerSilenzio) clearTimeout(timerSilenzio);
-      inAscolto = false;
-      onFine();
+      if (inAscolto) {
+        fermaEInvia(onRisultato, onStato, onFine);
+      }
     };
 
     try {
