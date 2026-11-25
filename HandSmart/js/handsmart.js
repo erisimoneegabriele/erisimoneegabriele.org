@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const linkWa = document.createElement("a");
   linkWa.id = "link-wa";
+  linkWa.target = "_blank";
+  linkWa.rel = "noopener";
   linkWa.style.cssText = "display:none;margin-top:12px;padding:24px;background:#16a34a;color:#fff;font-size:1.5rem;font-weight:bold;border-radius:16px;text-align:center;text-decoration:none";
   linkWa.textContent = "📨 INVIA SU WHATSAPP";
   btnDetta.parentNode.appendChild(linkWa);
@@ -20,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     setTimeout(function() {
       linkWa.style.display = "none";
       elStato.textContent = "Pronto";
-    }, 500);
+    }, 800);
   });
 
   function controllaBrowser() {
@@ -96,7 +98,10 @@ document.addEventListener("DOMContentLoaded", function() {
     Dettatura.avvia(
       function(testo) {
         elStato.textContent = "Pronto: " + testo;
-        linkWa.href = "https:" + doppiaBarra + "://whatsapp.com" + sl + "send?phone=" + num + "&text=" + encodeURIComponent(testo);
+        const u = new URL("https:" + doppiaBarra + "://whatsapp.com" + sl + "send");
+        u.searchParams.set("phone", num);
+        u.searchParams.set("text", testo);
+        linkWa.href = u.toString();
         linkWa.style.display = "block";
         VoceTTS.parla("Premi il tasto verde per inviare");
       },
