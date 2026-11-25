@@ -1,1 +1,34 @@
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Microfono</title>
+</head>
+<body style="background:#121212;color:#fff;font-family:sans-serif;text-align:center;padding:30px">
+  <button id="btn" style="width:100%;padding:40px;font-size:2rem;background:#1565c0;color:#fff;border:none;border-radius:16px">
+    🗣️ PROVA MIC
+  </button>
+  <p id="log" style="margin-top:30px;font-size:1.5rem;color:#ffd54f">Pronto</p>
+
+  <script>
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const btn = document.getElementById("btn");
+    const log = document.getElementById("log");
+
+    btn.onclick = function() {
+      if (!SR) { log.textContent = "NON SUPPORTATO"; return; }
+      const r = new SR();
+      r.lang = "it-IT";
+      r.onstart = function() { log.textContent = "ASCOLTO... PARLA!"; };
+      r.onresult = function(e) {
+        log.textContent = "CAPITO: " + e.results.item(0).item(0).transcript;
+      };
+      r.onerror = function(e) { log.textContent = "ERRORE: " + e.error; };
+      r.onend = function() { log.textContent += " (FINE)"; };
+      r.start();
+    };
+  </script>
+</body>
+</html>
