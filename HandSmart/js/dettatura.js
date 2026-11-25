@@ -2,10 +2,14 @@ const Dettatura = (function() {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   let rec = null;
   let inAscolto = false;
-  let testoAccumulato = "";
+  let testoConfermato = "";
+  let testoBozza = "";
   let timerSilenzio = null;
+  let cbRisultato = null;
+  let cbStato = null;
+  let cbFine = null;
 
-  function fermaEInvia(onRisultato, onStato, onFine) {
+  function chiudiDefinitivo() {
     if (!inAscolto) return;
     inAscolto = false;
     if (timerSilenzio) {
@@ -13,78 +17,96 @@ const Dettatura = (function() {
       timerSilenzio = null;
     }
     if (rec) {
-      try { rec.abort(); } catch (e) {}
+      rec.onend = null;
+      rec.onresult = null;
+      rec.onerror = null;
+      try { rec.stop(); } catch (e) {}
+      rec = null;
     }
-    const pulito = testoAccumulato.trim();
-    if (pulito.length > 0) {
-      onRisultato(pulito);
-    } else {
-      onStato("Nessuna parola rilevata");
+    const pulito = (testoConfermato + " " + testoBozza).trim();
+    if (pulito.length > 0 && cbRisultato) {
+      cbRisultato(pulito);
+    } else if (cbStato) {
+      cbStato("Nessuna parola rilevata");
     }
-    onFine();
+    if (cbFine) cbFine();
   }
 
   function avvia(onRisultato, onStato, onFine) {
     if (!SpeechRec) {
       onStato("Microfono non supportato");
+      onFine();
       return;
     }
-
     if (inAscolto) {
-      fermaEInvia(onRisultato, onStato, onFine);
+      chiudiDefinitivo();
       return;
     }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    testoConfermato = "";
+    testoBozza = "";
+    cbRisultato = onRisultato;
+    cbStato = onStato;
+    cbFine = onFine;
+    inAscolto = true;
+    onStato("Parla con calma...");
 
-    testoAccumulato = "";
     rec = new SpeechRec();
     rec.lang = "it-IT";
     rec.continuous = true;
-    rec.interimResults = false;
+    rec.interimResults = true;
     rec.maxAlternatives = 1;
 
-    rec.onstart = function() {
-      inAscolto = true;
-      onStato("Parla con calma...");
-    };
-
     rec.onresult = function(evento) {
+      if (!inAscolto) return;
       if (timerSilenzio) clearTimeout(timerSilenzio);
-      let frase = "";
+      let finale = "";
+      let bozza = "";
       const tot = evento.results.length;
-      for (let i = evento.resultIndex; i < tot; i++) {
+      for (let i = 0; i < tot; i++) {
         const riga = evento.results.item(i);
+        const alt = riga.item(0).transcript;
         if (riga.isFinal) {
-          frase += riga.item(0).transcript + " ";
+          finale += alt + " ";
+        } else {
+          bozza += alt + " ";
         }
       }
-      testoAccumulato += frase;
-      if (testoAccumulato.trim().length > 0) {
-        onStato("Dettato: " + testoAccumulato.trim());
+      testoConfermato = finale;
+      testoBozza = bozza;
+      const attuale = (testoConfermato + " " + testoBozza).trim();
+      if (attuale.length > 0 && cbStato) {
+        cbStato("Dettato: " + attuale);
       }
-      timerSilenzio = setTimeout(function() {
-        fermaEInvia(onRisultato, onStato, onFine);
-      }, 4000);
+      timerSilenzio = setTimeout(chiudiDefinitivo, 4500);
     };
 
     rec.onerror = function(err) {
-      if (err.error !== "aborted" && inAscolto) {
-        onStato("Errore: " + err.error);
+      if (err.error === "not-allowed" || err.error === "service-not-allowed") {
+        if (cbStato) cbStato("Permesso microfono negato");
       }
+      chiudiDefinitivo();
     };
 
     rec.onend = function() {
-      if (inAscolto) {
-        fermaEInvia(onRisultato, onStato, onFine);
-      }
+      if (inAscolto) chiudiDefinitivo();
     };
 
+    timerSilenzio = setTimeout(chiudiDefinitivo, 9000);
     try {
       rec.start();
     } catch (e) {
       inAscolto = false;
       onStato("Riprova a toccare");
+      onFine();
     }
   }
 
-  return { avvia: avvia };
+  function attiva() {
+    return inAscolto;
+  }
+
+  return { avvia: avvia, attiva: attiva };
 })();

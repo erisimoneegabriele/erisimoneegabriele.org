@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if (leggi) VoceTTS.parla(c.nome);
   }
 
+  window.addEventListener("pageshow", function() {
+    if (!Dettatura.attiva() && urlPronto.length === 0) {
+      aggiornaScheda(false);
+    }
+  });
+
   btnTts.addEventListener("click", function() { VoceTTS.alterna(btnTts); });
 
   document.getElementById("btn-su").addEventListener("click", function() {
@@ -90,9 +96,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     const c = prendiContatto(indice);
     const num = pulisciNumero(c.telefono);
-    btnDetta.classList.add("ascolto");
-    btnDetta.textContent = "🔴 PARLA... (TOCCA PER FINE)";
-    boxScheda.classList.add("in-registrazione");
+    if (!Dettatura.attiva()) {
+      btnDetta.classList.add("ascolto");
+      btnDetta.textContent = "🔴 PARLA... (TOCCA PER FINE)";
+      boxScheda.classList.add("in-registrazione");
+    }
     Dettatura.avvia(
       function(testo) {
         elStato.textContent = "Pronto: " + testo;
