@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   let indice = 0;
+  let urlPronto = "";
   const sl = String.fromCharCode(47);
   const doppiaBarra = sl + sl;
 
@@ -10,21 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const btnTts = document.getElementById("btn-tts");
   const btnDetta = document.getElementById("btn-detta");
 
-  const linkWa = document.createElement("a");
-  linkWa.id = "link-wa";
-  linkWa.target = "_blank";
-  linkWa.rel = "noopener";
-  linkWa.style.cssText = "display:none;margin-top:12px;padding:24px;background:#16a34a;color:#fff;font-size:1.5rem;font-weight:bold;border-radius:16px;text-align:center;text-decoration:none";
-  linkWa.textContent = "📨 INVIA SU WHATSAPP";
-  btnDetta.parentNode.appendChild(linkWa);
-
-  linkWa.addEventListener("click", function() {
-    setTimeout(function() {
-      linkWa.style.display = "none";
-      elStato.textContent = "Pronto";
-    }, 800);
-  });
-
   function controllaBrowser() {
     const ua = navigator.userAgent || "";
     const isAndroid = ua.indexOf("Android") !== -1;
@@ -32,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const isChrome = ua.indexOf("Chrome") !== -1 && !isWebView;
     if (isAndroid && !isChrome) {
       const link = "intent:" + doppiaBarra + location.host + location.pathname + "#Intent;scheme=https;package=com.android.chrome;end";
-      document.body.innerHTML = "<div style='padding:24px;text-align:center'><h1 style='color:#ffd60a;margin-bottom:20px'>Apri con Google Chrome</h1><a href='" + link + "' style='display:block;padding:28px;background:#16a34a;color:#fff;font-size:1.6rem;font-weight:bold;border-radius:16px;text-decoration:none'>🌐 APRI IN CHROME</a></div>";
+      document.body.innerHTML = "<div style='padding:24px;text-align:center'><h1 style='color:#ffd54f;margin-bottom:20px'>Apri con Google Chrome</h1><a href='" + link + "' style='display:block;padding:28px;background:#2e7d32;color:#fff;font-size:1.6rem;font-weight:bold;border-radius:16px;text-decoration:none'>🌐 APRI IN CHROME</a></div>";
       return false;
     }
     return true;
@@ -52,8 +38,14 @@ document.addEventListener("DOMContentLoaded", function() {
     return n;
   }
 
+  function resetDetta() {
+    urlPronto = "";
+    btnDetta.style.backgroundColor = "";
+    btnDetta.textContent = "🗣️ DETTA TESTO";
+  }
+
   function aggiornaScheda(leggi) {
-    linkWa.style.display = "none";
+    resetDetta();
     if (typeof CONTATTI === "undefined" || CONTATTI.length === 0) {
       elNome.textContent = "Rubrica vuota";
       return;
@@ -89,27 +81,34 @@ document.addEventListener("DOMContentLoaded", function() {
 
   btnDetta.addEventListener("click", function() {
     if (!CONTATTI || CONTATTI.length === 0) return;
-    linkWa.style.display = "none";
+    if (urlPronto.length > 0) {
+      const destinazione = urlPronto;
+      resetDetta();
+      elStato.textContent = "Apro WhatsApp...";
+      window.location.href = destinazione;
+      return;
+    }
     const c = prendiContatto(indice);
     const num = pulisciNumero(c.telefono);
     btnDetta.classList.add("ascolto");
-    btnDetta.textContent = "🔴 PARLA ORA...";
+    btnDetta.textContent = "🔴 PARLA... (TOCCA PER FINE)";
     boxScheda.classList.add("in-registrazione");
     Dettatura.avvia(
       function(testo) {
         elStato.textContent = "Pronto: " + testo;
-        const u = new URL("https:" + doppiaBarra + "://whatsapp.com" + sl + "send");
-        u.searchParams.set("phone", num);
-        u.searchParams.set("text", testo);
-        linkWa.href = u.toString();
-        linkWa.style.display = "block";
+        urlPronto = "https:" + doppiaBarra + "wa.me" + sl + num + "?text=" + encodeURIComponent(testo);
         VoceTTS.parla("Premi il tasto verde per inviare");
       },
       function(msg) { elStato.textContent = msg; },
       function() {
         btnDetta.classList.remove("ascolto");
-        btnDetta.textContent = "🗣️ DETTA TESTO";
         boxScheda.classList.remove("in-registrazione");
+        if (urlPronto.length > 0) {
+          btnDetta.style.backgroundColor = "#2e7d32";
+          btnDetta.textContent = "📨 INVIA SU WHATSAPP";
+        } else {
+          resetDetta();
+        }
       }
     );
   });
