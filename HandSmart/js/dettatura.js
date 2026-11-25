@@ -2,28 +2,14 @@ const Dettatura = (function() {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   let rec = null;
   let inAscolto = false;
-  let testoConfermato = "";
-  let testoBozza = "";
-  let timerSilenzio = null;
+  let testoTotale = "";
   let cbRisultato = null;
   let cbStato = null;
   let cbFine = null;
 
-  function chiudiDefinitivo() {
-    if (!inAscolto) return;
+  function fineDefinitiva() {
     inAscolto = false;
-    if (timerSilenzio) {
-      clearTimeout(timerSilenzio);
-      timerSilenzio = null;
-    }
-    if (rec) {
-      rec.onend = null;
-      rec.onresult = null;
-      rec.onerror = null;
-      try { rec.stop(); } catch (e) {}
-      rec = null;
-    }
-    const pulito = (testoConfermato + " " + testoBozza).trim();
+    const pulito = testoTotale.trim();
     if (pulito.length > 0 && cbRisultato) {
       cbRisultato(pulito);
     } else if (cbStato) {
@@ -32,71 +18,69 @@ const Dettatura = (function() {
     if (cbFine) cbFine();
   }
 
+  function avviaSessione() {
+    rec = new SpeechRec();
+    rec.lang = "it-IT";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+
+    rec.onresult = function(evento) {
+      let testo = "";
+      const tot = evento.results.length;
+      for (let i = 0; i < tot; i++) {
+        const riga = evento.results.item(i);
+        const alt = riga.item(0);
+        testo += alt.transcript + " ";
+      }
+      if (testo.trim().length > 0) {
+        testoTotale += testo.trim() + " ";
+        if (cbStato) cbStato("Dettato: " + testoTotale.trim());
+      }
+    };
+
+    rec.onerror = function(err) {
+      if (err.error === "not-allowed" || err.error === "service-not-allowed") {
+        inAscolto = false;
+        if (cbStato) cbStato("Permesso microfono negato");
+        if (cbFine) cbFine();
+      }
+    };
+
+    rec.onend = function() {
+      if (inAscolto) {
+        try { avviaSessione(); } catch (e) { fineDefinitiva(); }
+      } else {
+        fineDefinitiva();
+      }
+    };
+
+    rec.start();
+  }
+
   function avvia(onRisultato, onStato, onFine) {
     if (!SpeechRec) {
       onStato("Microfono non supportato");
       onFine();
       return;
     }
+
     if (inAscolto) {
-      chiudiDefinitivo();
+      inAscolto = false;
+      if (rec) {
+        try { rec.stop(); } catch (e) { fineDefinitiva(); }
+      }
       return;
     }
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-    testoConfermato = "";
-    testoBozza = "";
+
+    testoTotale = "";
     cbRisultato = onRisultato;
     cbStato = onStato;
     cbFine = onFine;
     inAscolto = true;
-    onStato("Parla con calma...");
+    onStato("Parla ora...");
 
-    rec = new SpeechRec();
-    rec.lang = "it-IT";
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.maxAlternatives = 1;
-
-    rec.onresult = function(evento) {
-      if (!inAscolto) return;
-      if (timerSilenzio) clearTimeout(timerSilenzio);
-      let finale = "";
-      let bozza = "";
-      const tot = evento.results.length;
-      for (let i = 0; i < tot; i++) {
-        const riga = evento.results.item(i);
-        const alt = riga.item(0).transcript;
-        if (riga.isFinal) {
-          finale += alt + " ";
-        } else {
-          bozza += alt + " ";
-        }
-      }
-      testoConfermato = finale;
-      testoBozza = bozza;
-      const attuale = (testoConfermato + " " + testoBozza).trim();
-      if (attuale.length > 0 && cbStato) {
-        cbStato("Dettato: " + attuale);
-      }
-      timerSilenzio = setTimeout(chiudiDefinitivo, 4500);
-    };
-
-    rec.onerror = function(err) {
-      if (err.error === "not-allowed" || err.error === "service-not-allowed") {
-        if (cbStato) cbStato("Permesso microfono negato");
-      }
-      chiudiDefinitivo();
-    };
-
-    rec.onend = function() {
-      if (inAscolto) chiudiDefinitivo();
-    };
-
-    timerSilenzio = setTimeout(chiudiDefinitivo, 9000);
     try {
-      rec.start();
+      avviaSessione();
     } catch (e) {
       inAscolto = false;
       onStato("Riprova a toccare");
