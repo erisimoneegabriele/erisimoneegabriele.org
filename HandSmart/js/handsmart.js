@@ -55,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function apriWhatsApp(num, testo) {
-    window.location.href = "whatsapp:" + doppiaBarra + "send?phone=" + num + "&text=" + encodeURIComponent(testo);
+    const url = "https:" + doppiaBarra + "://whatsapp.com" + sl + "send?phone=" + num + "&text=" + encodeURIComponent(testo);
+    window.location.assign(url);
   }
 
   btnTts.addEventListener("click", function() { VoceTTS.alterna(btnTts); });
@@ -83,29 +84,30 @@ document.addEventListener("DOMContentLoaded", function() {
   btnDetta.addEventListener("click", function() {
     if (!CONTATTI || CONTATTI.length === 0) return;
     if (testoPronto.length > 0) {
-      apriWhatsApp(numPronto, testoPronto);
+      const msg = testoPronto;
+      const dest = numPronto;
       testoPronto = "";
-      aggiornaScheda(false);
+      apriWhatsApp(dest, msg);
       return;
     }
     const c = prendiContatto(indice);
     numPronto = pulisciNumero(c.telefono);
     btnDetta.classList.add("ascolto");
-    btnDetta.textContent = "🔴 PARLA ORA...";
+    btnDetta.textContent = "🔴 PARLA ORA... (TOCCA PER FINIRE)";
     boxScheda.classList.add("in-registrazione");
     Dettatura.avvia(
       function(testo) {
         testoPronto = testo;
         elStato.textContent = "Pronto: " + testo;
-        apriWhatsApp(numPronto, testoPronto);
+        VoceTTS.parla("Premi il tasto verde per inviare");
       },
       function(msg) { elStato.textContent = msg; },
       function() {
         btnDetta.classList.remove("ascolto");
         boxScheda.classList.remove("in-registrazione");
         if (testoPronto.length > 0) {
-          btnDetta.style.backgroundColor = "#2e7d32";
-          btnDetta.textContent = "📨 INVIA WHATSAPP";
+          btnDetta.style.backgroundColor = "#16a34a";
+          btnDetta.textContent = "📨 INVIA SU WHATSAPP";
         } else {
           btnDetta.textContent = "🗣️ DETTA TESTO";
         }
