@@ -2,27 +2,27 @@ const Dettatura = (function() {
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   let rec = null;
   let inAscolto = false;
-  let testoTotale = "";
-  let cbRisultato = null;
-  let cbStato = null;
-  let cbFine = null;
 
-  function fineDefinitiva() {
-    inAscolto = false;
-    const pulito = testoTotale.trim();
-    if (pulito.length > 0 && cbRisultato) {
-      cbRisultato(pulito);
-    } else if (cbStato) {
-      cbStato("Nessuna parola rilevata");
+  function avvia(onRisultato, onStato, onFine) {
+    if (!SpeechRec) {
+      onStato("Microfono non supportato");
+      return;
     }
-    if (cbFine) cbFine();
-  }
 
-  function avviaSessione() {
+    if (inAscolto && rec) {
+      rec.stop();
+      return;
+    }
+
     rec = new SpeechRec();
     rec.lang = "it-IT";
     rec.interimResults = false;
     rec.maxAlternatives = 1;
+
+    rec.onstart = function() {
+      inAscolto = true;
+      onStato("Parla ora...");
+    };
 
     rec.onresult = function(evento) {
       let testo = "";
@@ -32,65 +32,30 @@ const Dettatura = (function() {
         const alt = riga.item(0);
         testo += alt.transcript + " ";
       }
-      if (testo.trim().length > 0) {
-        testoTotale += testo.trim() + " ";
-        if (cbStato) cbStato("Dettato: " + testoTotale.trim());
+      const pulito = testo.trim();
+      if (pulito.length > 0) {
+        onRisultato(pulito);
+      } else {
+        onStato("Nessuna parola rilevata");
       }
     };
 
     rec.onerror = function(err) {
-      if (err.error === "not-allowed" || err.error === "service-not-allowed") {
-        inAscolto = false;
-        if (cbStato) cbStato("Permesso microfono negato");
-        if (cbFine) cbFine();
-      }
+      onStato("Errore: " + err.error);
     };
 
     rec.onend = function() {
-      if (inAscolto) {
-        try { avviaSessione(); } catch (e) { fineDefinitiva(); }
-      } else {
-        fineDefinitiva();
-      }
+      inAscolto = false;
+      onFine();
     };
 
-    rec.start();
-  }
-
-  function avvia(onRisultato, onStato, onFine) {
-    if (!SpeechRec) {
-      onStato("Microfono non supportato");
-      onFine();
-      return;
-    }
-
-    if (inAscolto) {
-      inAscolto = false;
-      if (rec) {
-        try { rec.stop(); } catch (e) { fineDefinitiva(); }
-      }
-      return;
-    }
-
-    testoTotale = "";
-    cbRisultato = onRisultato;
-    cbStato = onStato;
-    cbFine = onFine;
-    inAscolto = true;
-    onStato("Parla ora...");
-
     try {
-      avviaSessione();
+      rec.start();
     } catch (e) {
       inAscolto = false;
       onStato("Riprova a toccare");
-      onFine();
     }
   }
 
-  function attiva() {
-    return inAscolto;
-  }
-
-  return { avvia: avvia, attiva: attiva };
+  return { avvia: avvia };
 })();
