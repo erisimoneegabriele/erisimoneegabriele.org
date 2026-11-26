@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let urlPronto = "";
   const sl = String.fromCharCode(47);
   const doppiaBarra = sl + sl;
+  const rxNonCifre = new RegExp("\\D", "g");
 
   const boxScheda = document.querySelector(".scheda-contatto");
   const elNome = document.getElementById("nome-contatto");
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const elStato = document.getElementById("stato-azione");
   const btnTts = document.getElementById("btn-tts");
   const btnDetta = document.getElementById("btn-detta");
+  const btnVocale = document.getElementById("btn-vocale");
 
   function prendiContatto(pos) {
     return Array.prototype.slice.call(CONTATTI, pos, pos + 1).pop();
@@ -18,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function resetDetta() {
     urlPronto = "";
     btnDetta.style.backgroundColor = "";
-    btnDetta.textContent = "🗣️ DETTA TESTO";
+    btnDetta.textContent = "💬 TESTO WHATSAPP";
   }
 
   function aggiornaScheda(leggi) {
@@ -31,22 +33,16 @@ document.addEventListener("DOMContentLoaded", function() {
     elNome.textContent = c.nome;
     elAvatar.textContent = c.emoji || "👤";
     elStato.textContent = "Pronto";
-    if (leggi) {
-      VoceTTS.parla(c.nome);
-    }
+    if (leggi) VoceTTS.parla(c.nome);
   }
 
   function pulisciNumero(num) {
-    let n = String(num).replace(/[^0-9]/g, "");
-    if (n.length === 10 && n.charAt(0) === "3") {
-      n = "39" + n;
-    }
+    let n = String(num).replace(rxNonCifre, "");
+    if (n.length === 10 && n.charAt(0) === "3") n = "39" + n;
     return n;
   }
 
-  btnTts.addEventListener("click", function() {
-    VoceTTS.alterna(btnTts);
-  });
+  btnTts.addEventListener("click", function() { VoceTTS.alterna(btnTts); });
 
   document.getElementById("btn-su").addEventListener("click", function() {
     if (typeof CONTATTI === "undefined" || CONTATTI.length === 0) return;
@@ -66,9 +62,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const num = pulisciNumero(c.telefono);
     elStato.textContent = "Chiamata...";
     VoceTTS.parla("Chiamo " + c.nome);
+    setTimeout(function() { window.location.href = "tel:+" + num; }, 1200);
+  });
+
+  btnVocale.addEventListener("click", function() {
+    if (typeof CONTATTI === "undefined" || CONTATTI.length === 0) return;
+    const c = prendiContatto(indice);
+    const num = pulisciNumero(c.telefono);
+    elStato.textContent = "Apro chat vocale...";
+    VoceTTS.parla("Vocale a " + c.nome);
     setTimeout(function() {
-      window.location.href = "tel:+" + num;
-    }, 1200);
+      window.location.href = "https:" + doppiaBarra + "wa.me" + sl + num;
+    }, 900);
   });
 
   btnDetta.addEventListener("click", function() {
@@ -85,24 +90,19 @@ document.addEventListener("DOMContentLoaded", function() {
     btnDetta.classList.add("ascolto");
     btnDetta.textContent = "🔴 PARLA ORA...";
     boxScheda.classList.add("in-registrazione");
-
     Dettatura.avvia(
       function(testo) {
         elStato.textContent = "Pronto: " + testo;
         urlPronto = "https:" + doppiaBarra + "wa.me" + sl + num + "?text=" + encodeURIComponent(testo);
       },
-      function(msg) {
-        elStato.textContent = msg;
-      },
+      function(msg) { elStato.textContent = msg; },
       function() {
         btnDetta.classList.remove("ascolto");
         boxScheda.classList.remove("in-registrazione");
         if (urlPronto.length > 0) {
           btnDetta.style.backgroundColor = "#2e7d32";
           btnDetta.textContent = "📨 INVIA SU WHATSAPP";
-        } else {
-          resetDetta();
-        }
+        } else { resetDetta(); }
       }
     );
   });
