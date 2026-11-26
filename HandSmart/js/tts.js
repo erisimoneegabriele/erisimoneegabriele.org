@@ -4,12 +4,12 @@ const VoceTTS = (function() {
   function alterna(bottone) {
     abilitato = !abilitato;
     if (abilitato) {
-      bottone.textContent = "🔊 Voce ON";
+      bottone.textContent = "🔊 Voce";
       bottone.classList.add("attivo");
       bottone.setAttribute("aria-pressed", "true");
       parla("Lettura vocale attivata");
     } else {
-      bottone.textContent = "🔇 Voce OFF";
+      bottone.textContent = "🔇 Voce";
       bottone.classList.remove("attivo");
       bottone.setAttribute("aria-pressed", "false");
       if ("speechSynthesis" in window) {
