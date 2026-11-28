@@ -14,14 +14,10 @@ body, html {
   overflow: hidden;
 }
 
-.contenitore {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-}
+.contenitore { display: flex; height: 100vh; width: 100vw; }
 
 .scheda-contatto {
-  width: 50%;
+  width: 46%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -30,52 +26,70 @@ body, html {
   text-align: center;
   background-color: #1e1e1e;
   border-right: 3px solid #333333;
-  transition: box-shadow 0.2s ease;
 }
 
-.scheda-contatto.in-registrazione {
-  box-shadow: inset 0 0 0 6px #ff1744;
-  background-color: #2a1215;
-}
+.intestazione-sx { width: 100%; display: flex; flex-direction: column; gap: 4px; }
+.titolo-app { font-size: 1.55rem; font-weight: bold; color: #ffd54f; letter-spacing: 0.5px; }
+.sottotitolo-app { font-size: 0.85rem; color: #e0e0e0; margin-bottom: 4px; }
 
-.barra-sinistra-top { width: 100%; display: flex; flex-direction: column; gap: 8px; }
-
-.btn-guida-top,
-.btn-tts-mini {
+.btn-autore {
   width: 100%;
-  min-height: 58px;
+  min-height: 44px;
+  border-radius: 12px;
+  background-color: #263238;
+  color: #90caf9;
+  border: 2px solid #90caf9;
+  font-size: 0.95rem;
+  font-weight: bold;
+  padding: 4px;
+}
+
+.info-contatto { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.avatar { font-size: 4.3rem; margin-bottom: 8px; }
+#nome-contatto { font-size: 2rem; line-height: 1.2; word-break: break-word; }
+.stato { margin-top: 10px; font-size: 1.15rem; color: #ffd54f; font-weight: bold; }
+
+.pulsantiera {
+  width: 54%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+
+.riga-top-dx { display: flex; gap: 8px; height: 68px; flex-shrink: 0; }
+
+.btn-mini {
   border-radius: 14px;
-  font-size: 1.2rem;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
   border: 2px solid #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
-.btn-guida-top { background-color: #d97706; color: #ffffff; }
-.btn-tts-mini { background-color: #333333; color: #eeeeee; border-color: #888888; }
-.btn-tts-mini.attivo { background-color: #2e7d32; color: #ffffff; border-color: #81c784; }
+.btn-guida { flex: 0.7; background-color: #d97706; color: #ffffff; font-size: 2rem; }
+.btn-tts { flex: 1.3; background-color: #424242; color: #ffffff; border-color: #bdbdbd; font-size: 1.15rem; }
+.btn-tts.attivo { background-color: #6a1b9a; color: #ffffff; border-color: #e1bee7; }
 
-.info-contatto { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.avatar { font-size: 4rem; margin-bottom: 10px; }
-#nome-contatto { font-size: 2rem; line-height: 1.2; word-break: break-word; }
-.stato { margin-top: 14px; font-size: 1.15rem; color: #ffd54f; font-weight: bold; }
+.btn {
+  flex: 1;
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.45rem;
+  font-weight: bold;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6px;
+}
 
-.pulsantiera { width: 50%; display: flex; flex-direction: column; gap: 10px; padding: 10px; }
-.riga-nav { flex: 1; display: flex; gap: 8px; }
-.btn { flex: 1; border: none; border-radius: 16px; font-size: 1.35rem; font-weight: bold; color: #ffffff; display: flex; align-items: center; justify-content: center; text-align: center; padding: 6px; }
-.btn:active { transform: scale(0.96); }
+.btn:active, .btn-mini:active, .btn-autore:active { transform: scale(0.96); }
 .btn-chiama { background-color: #2e7d32; }
-.btn-vocale { background-color: #00897b; }
-.btn-detta { background-color: #1565c0; }
-.btn-nav { background-color: #424242; font-size: 1.6rem; }
-
-@keyframes pulsazione {
-  0% { transform: scale(1); background-color: #c62828; }
-  50% { transform: scale(0.97); background-color: #ff1744; }
-  100% { transform: scale(1); background-color: #c62828; }
-}
-
-.btn-detta.ascolto { animation: pulsazione 1s infinite ease-in-out; box-shadow: 0 0 18px rgba(255, 23, 68, 0.8); }
+.btn-vocale { background-color: #0277bd; }
+.btn-nav { background-color: #424242; font-size: 1.7rem; border: 2px solid #757575; }
