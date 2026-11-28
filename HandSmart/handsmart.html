@@ -4,11 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>HandSmart - Il cellulare in una mano</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
   <main class="contenitore">
     <section class="scheda-contatto" aria-live="polite">
+      <div class="intestazione-sx">
+        <div class="titolo-app">HandSmart</div>
+        <div class="sottotitolo-app">Il cellulare in una mano</div>
+        <button id="btn-autore" class="btn-autore" type="button">
+          💬 Ing. Simone Soria
+        </button>
+      </div>
       <div class="info-contatto">
         <div id="avatar-box" class="avatar">👤</div>
         <h1 id="nome-contatto">Caricamento...</h1>
@@ -18,30 +25,28 @@
 
     <nav class="pulsantiera" aria-label="Comandi pollice destro">
       <div class="riga-top-dx">
-        <a href="handsmart_intro.html" class="btn-mini btn-guida">📖 GUIDA</a>
-        <button id="btn-tts" class="btn-mini btn-tts" type="button" aria-pressed="false">
-          🔇 Voce
+        <a href="handsmart_intro.html" class="btn-mini btn-guida" aria-label="Guida">?</a>
+        <button id="btn-tts" class="btn-mini btn-tts attivo" type="button" aria-pressed="true">
+          🔊 Voce
         </button>
       </div>
       <button id="btn-chiama" class="btn btn-chiama" type="button">
         📞 CHIAMA
       </button>
       <button id="btn-vocale" class="btn btn-vocale" type="button">
-        🎙️ VOCALE WHATSAPP
+        💬 APRI CHAT
       </button>
-      <div class="riga-nav">
-        <button id="btn-su" class="btn btn-nav" type="button">
-          ▲ SU
-        </button>
-        <button id="btn-giu" class="btn btn-nav" type="button">
-          ▼ GIÙ
-        </button>
-      </div>
+      <button id="btn-su" class="btn btn-nav" type="button">
+        ▲ SU
+      </button>
+      <button id="btn-giu" class="btn btn-nav" type="button">
+        ▼ GIÙ
+      </button>
     </nav>
   </main>
 
-  <script src="js/rubrica.js"></script>
-  <script src="js/tts.js"></script>
-  <script src="js/handsmart.js"></script>
+  <script src="js/rubrica.js?v=3"></script>
+  <script src="js/tts.js?v=3"></script>
+  <script src="js/handsmart.js?v=3"></script>
 </body>
 </html>
